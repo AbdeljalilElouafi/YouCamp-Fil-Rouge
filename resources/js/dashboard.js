@@ -1,5 +1,3 @@
-import './bootstrap';
-
 document.addEventListener('DOMContentLoaded', function () {
     // Reservation Chart
     const resCtx = document.getElementById('reservationChart').getContext('2d');
@@ -93,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-    // Animate number counters
+   
     const counters = document.querySelectorAll('.number-counter');
     counters.forEach(counter => {
         const target = parseFloat(counter.innerText.replace(/,|\$|K/g, ''));
@@ -142,20 +140,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100 * index);
     });
 });
-
-function openModal(modalId) {
-    document.getElementById(modalId).classList.remove('hidden');
-}
-
-// Close Modal
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.add('hidden');
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    if (event.target.classList.contains('bg-black')) {
-        event.target.closest('.fixed').classList.add('hidden');
-    }
-};
-
