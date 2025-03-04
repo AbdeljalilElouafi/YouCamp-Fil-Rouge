@@ -3,29 +3,49 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Card 1: Total Users -->
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold mb-4">Total Users</h2>
-            <p class="text-3xl font-bold">1,234</p>
-        </div>
+<div class="container mx-auto">
+                    <!-- Dashboard Overview -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        @include('components.card', [
+                            'title' => 'Total Campsites',
+                            'value' => '347',
+                            'color' => 'indigo',
+                            'icon' => 'campground',
+                            'percentage' => '12%'
+                        ])
+                        <!-- Add other cards here -->
+                        @include('components.card', [
+                            'title' => 'Total users',
+                            'value' => '1809',
+                            'color' => 'indigo',
+                            'icon' => 'users',
+                            'percentage' => '46%'
+                        ])
+                    </div>
 
-        <!-- Card 2: Total Gérants -->
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold mb-4">Total Gérants</h2>
-            <p class="text-3xl font-bold">56</p>
-        </div>
+                    <!-- Charts Section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        @include('components.chart', [
+                            'title' => 'Reservation Trends',
+                            'id' => 'reservationChart'
+                        ])
+                        @include('components.chart', [
+                            'title' => 'User Demographics',
+                            'id' => 'demographicsChart'
+                        ])
+                    </div>
 
-        <!-- Card 3: Total Reservations -->
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold mb-4">Total Reservations</h2>
-            <p class="text-3xl font-bold">789</p>
-        </div>
-    </div>
+                    <!-- Recent Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Recent Bookings Table -->
+                        <div class="card p-6 lg:col-span-2">
+                            <!-- Table content here -->
+                        </div>
 
-    <!-- Chart Placeholder -->
-    <div class="mt-8 bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-semibold mb-4">Reservations Overview</h2>
-        <div id="chart" class="h-64"></div>
-    </div>
+                        <!-- Top Campsites -->
+                        <div class="card p-6">
+                            <!-- Top Campsites content here -->
+                        </div>
+                    </div>
+                </div>
 @endsection
