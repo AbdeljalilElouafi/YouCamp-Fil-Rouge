@@ -27,6 +27,12 @@ Route::prefix('admin')->group(function () {
     Route::get('/posts', function () {
         return view('admin.posts');
     })->name('admin.posts');
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('login');
 });
 
 
