@@ -22,7 +22,7 @@
             font-family: 'Cabin Sketch', cursive;
         }
         .auth-container {
-            background: rgba(300, 300, 200, 0.4);
+            background: linear-gradient(to right, #557C93, #e3e3e3);
             backdrop-filter: blur(5px);
         }
         .auth-card {

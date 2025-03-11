@@ -1,4 +1,4 @@
-<!-- resources/views/components/header.blade.php -->
+
 <header class="header shadow-lg z-10">
     <div class="flex items-center justify-between py-4 px-6">
         <div class="flex items-center">
@@ -15,9 +15,16 @@
                 <i class="fas fa-bell text-white text-xl cursor-pointer"></i>
                 <span class="absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-xs text-white">3</span>
             </div>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit" class="flex items-center text-white hover:text-orange-400 transition duration-300 ease-in-out">
+                    <i class="fas fa-sign-out-alt text-xl"></i>
+                    <span class="ml-2">Logout</span>
+                </button>
+            </form>
             <div class="flex items-center">
                 <img src="/api/placeholder/40/40" alt="Admin" class="w-10 h-10 rounded-full border-2 border-orange-500">
-                <span class="ml-2 text-white">Admin User</span>
+                <span class="ml-2 text-white">Admin</span>
             </div>
         </div>
     </div>

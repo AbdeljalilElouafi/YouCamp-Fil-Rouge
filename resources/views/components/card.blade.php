@@ -1,4 +1,4 @@
-<!-- resources/views/components/card.blade.php -->
+
 <div class="card p-6">
     <div class="flex justify-between items-start">
         <div>

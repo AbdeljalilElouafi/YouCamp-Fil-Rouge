@@ -1,4 +1,4 @@
-<!-- resources/views/components/sidebar.blade.php -->
+
 <div class="sidebar w-72 space-y-6 py-7 px-4 overflow-y-auto">
     <div class="logo-font text-3xl font-bold text-center mb-8 text-white flex items-center justify-center">
         <span class="fire-icon mr-2"><i class="fas fa-campground text-orange-500"></i></span>
@@ -42,7 +42,7 @@
                     <span>Posts</span>
                 </a>
             </li>
-            <!-- Add other navigation items here -->
+            
         </ul>
     </nav>
     <div class="mt-auto pt-10">
