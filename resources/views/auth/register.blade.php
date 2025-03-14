@@ -69,6 +69,23 @@
                 </div>
             </div>
 
+            <div>
+                <label for="role" class="text-white text-sm font-medium block mb-2">Register As</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-user-tag text-gray-400"></i>
+                    </div>
+                    <select id="role" name="role" required
+                        class="form-input w-full pl-10 pr-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 @error('role') border-red-500 @enderror">
+                        <option value="visitor">Visitor</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                @error('role')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="mt-6">
                 <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-white bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
                     <i class="fas fa-user-plus mr-2"></i> Create Account

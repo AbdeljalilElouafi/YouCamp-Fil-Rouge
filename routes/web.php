@@ -1,25 +1,42 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 
-// Public routes (accessible to everyone)
+
 Route::middleware('guest')->group(function () {
-    // Login routes
+    
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
-    // Registration routes
+    
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-// Protected routes (require authentication)
-Route::middleware('auth')->group(function () {
-    // Logout route
+
+// Password reset routes
+Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');
+
+Route::middleware('auth','role:admin')->group(function () {
+    
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Admin routes
+    
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
@@ -47,7 +64,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Default route
+
 Route::get('/', function () {
     return view('welcome');
 });
