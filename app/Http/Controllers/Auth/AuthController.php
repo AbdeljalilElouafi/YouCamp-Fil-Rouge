@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Role;
 use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
@@ -23,14 +24,28 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
-        
+    
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->intended('/admin/dashboard'); 
+    
+            $user = Auth::user();
+    
+            
+            if ($user->hasRole('manager') && $user->status !== 'active') {
+                Auth::logout(); 
+                return redirect()->route('pending.activation')->with('message', 'Sorry, your account has not been activated yet. We will be in touch as soon as possible.');
+            }
+    
+           
+            if ($user->hasRole('admin')) {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->hasRole('manager')) {
+                return redirect()->route('manager.dashboard');
+            } else {
+                return redirect()->route('visitor.home');
+            }
         }
-
-        
+    
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -53,21 +68,29 @@ class AuthController extends Controller
             'role' => 'required|in:user,manager',
         ]);
     
+        $status = $request->role === 'manager' ? 'pending' : 'active';
+    
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'status' => $status,
         ]);
     
         
         $role = Role::where('name', $request->role)->first();
         $user->roles()->attach($role);
     
-        Auth::login($user);
+        
+        if ($status === 'active') {
+            Auth::login($user);
+            return redirect('/dashboard');
+        }
     
-        return redirect('/dashboard');
+        
+        return redirect()->route('pending.activation')->with('message', 'Thank you for registering! Your account is pending activation. We will be in touch as soon as possible.');
     }
-
+    
    
     public function logout(Request $request)
     {
