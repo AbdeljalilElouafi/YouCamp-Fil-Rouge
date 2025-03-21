@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AdminManagerController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\ServiceController;
 
 
 Route::middleware('guest')->group(function () {
@@ -63,9 +65,22 @@ Route::middleware('auth','role:admin')->group(function () {
             return view('admin.categories');
         })->name('admin.categories');
 
-        Route::get('/tags', function () {
-            return view('admin.tags');
-        })->name('admin.tags');
+        Route::get('/tags', [TagController::class, 'index'])->name('admin.tags.index');
+        Route::get('/tags/create', [TagController::class, 'create'])->name('admin.tags.create');
+        Route::post('/tags', [TagController::class, 'store'])->name('admin.tags.store');
+        Route::get('/tags/{id}/edit', [TagController::class, 'edit'])->name('admin.tags.edit');
+        Route::put('/tags/{id}', [TagController::class, 'update'])->name('admin.tags.update');
+        Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
+
+
+        Route::get('/services', [ServiceController::class, 'index'])->name('admin.services.index');
+        Route::get('/services/create', [ServiceController::class, 'create'])->name('admin.services.create');
+        Route::post('/services', [ServiceController::class, 'store'])->name('admin.services.store');
+        Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
+        Route::put('/services/{id}', [ServiceController::class, 'update'])->name('admin.services.update');
+        Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
+            
+        
 
         Route::get('/posts', function () {
             return view('admin.posts');

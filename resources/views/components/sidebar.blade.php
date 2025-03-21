@@ -18,20 +18,22 @@
                     <span>Users</span>
                 </a>
             </li>
+            
             <li class="nav-item">
                 <a href="{{ route('admin.managers') }}" class="flex items-center px-4 py-3 text-white">
                     <i class="fas fa-user-tie mr-3 text-xl"></i>
                     <span>Gérants</span>
                 </a>
             </li>
+            
             <li class="nav-item">
-                <a href="{{ route('admin.categories') }}" class="flex items-center px-4 py-3 text-white">
-                    <i class="fas fa-tags mr-3 text-xl"></i>
-                    <span>Categories</span>
+                <a href="{{ route('admin.services.index') }}" class="flex items-center px-4 py-3 text-white">
+                    <i class="fa fa-shopping-bag mr-3 text-xl"></i>
+                    <span>Services</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.tags') }}" class="flex items-center px-4 py-3 text-white">
+                <a href="{{ route('admin.tags.index') }}" class="flex items-center px-4 py-3 text-white">
                     <i class="fas fa-hashtag mr-3 text-xl"></i>
                     <span>Tags</span>
                 </a>

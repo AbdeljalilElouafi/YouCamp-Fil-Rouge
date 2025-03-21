@@ -7,6 +7,8 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-white mb-6">Manager Dashboard</h1>
 
+       
+
         <!-- Welcome Message -->
         <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
             <h2 class="text-2xl font-semibold text-white">Welcome, {{ Auth::user()->name }}!</h2>
