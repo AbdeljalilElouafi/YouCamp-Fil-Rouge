@@ -33,6 +33,11 @@ class User extends Authenticatable
         return $this->roles->contains('name', $role);
     }
 
+    public function auberges()
+    {
+        return $this->hasMany(Auberge::class, 'manager_id'); 
+    }
+
     public function hasPermission($permission)
     {
         foreach ($this->roles as $role) {
