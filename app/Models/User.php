@@ -38,6 +38,11 @@ class User extends Authenticatable
         return $this->hasMany(Auberge::class, 'manager_id'); 
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class); 
+    }
+
     public function hasPermission($permission)
     {
         foreach ($this->roles as $role) {
