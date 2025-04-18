@@ -5,10 +5,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasAvailability;
 
 class Auberge extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAvailability;
 
     protected $fillable = [
         'name', 'description', 'address', 'region_id', 'city_id', 

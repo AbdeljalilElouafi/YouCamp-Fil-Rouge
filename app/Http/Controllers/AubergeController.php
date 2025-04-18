@@ -150,5 +150,63 @@ class AubergeController extends Controller
         return view('auberges.my', compact('auberges'));
     }
 
+    
+    public function search(Request $request)
+    {
+        $query = Auberge::query()->with(['services', 'featuredPhoto'])
+            ->where('is_active', true);
+
+        // Location filter
+        if ($request->city) {
+            $query->where('city', 'like', '%'.$request->city.'%');
+        }
+
+        // Price filter
+        if ($request->price_min) {
+            $query->where('price_per_night', '>=', $request->price_min);
+        }
+        if ($request->price_max) {
+            $query->where('price_per_night', '<=', $request->price_max);
+        }
+
+        // Services filter
+        if ($request->services) {
+            $query->whereHas('services', function($q) use ($request) {
+                $q->whereIn('services.id', $request->services);
+            });
+        }
+
+        // Date availability filter
+        if ($request->check_in && $request->check_out) {
+            $query->whereDoesntHave('reservations', function($q) use ($request) {
+                $q->where(function($query) use ($request) {
+                    $query->whereBetween('check_in', [$request->check_in, $request->check_out])
+                        ->orWhereBetween('check_out', [$request->check_in, $request->check_out]);
+                })->where('status', '!=', 'cancelled');
+            });
+        }
+
+        $auberges = $query->paginate(10);
+
+        return view('auberges.search', compact('auberges'));
+    }
+
+    public function checkAvailability(Auberge $auberge, Request $request)
+    {
+        $request->validate([
+            'check_in' => 'required|date|after_or_equal:today',
+            'check_out' => 'required|date|after:check_in'
+        ]);
+
+        $available = $auberge->isAvailable($request->check_in, $request->check_out);
+
+        return response()->json([
+            'available' => $available,
+            'message' => $available 
+                ? "This auberge is available for your selected dates."
+                : "This auberge is not available for the selected dates."
+        ]);
+    }
+
 
 }
