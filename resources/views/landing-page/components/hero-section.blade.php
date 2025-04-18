@@ -1,3 +1,4 @@
+<!-- resources/views/landing-page/components/hero-section.blade.php -->
 
 <section class="relative bg-cover bg-center h-screen" style="background-image: url('https://images.unsplash.com/photo-1475483768296-6163e08872a1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGNhbXBmaXJlfGVufDB8fDB8fHww');">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>

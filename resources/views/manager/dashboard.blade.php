@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.manager')
 
 @section('title', 'Manager Dashboard')
 
@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold text-white mb-6">Manager Dashboard</h1>
 
-    <!-- Welcome Message with Real Data -->
+    
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
         <h2 class="text-2xl font-semibold text-white">Welcome, {{ Auth::user()->name }}!</h2>
         @if($myAuberges->count() > 0)
@@ -16,7 +16,7 @@
         @endif
     </div>
 
-    <!-- Quick Stats with Real Data -->
+    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:bg-gray-700 transition">
             <a href="{{ route('auberges.my') }}" class="block">
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <!-- Recent Reservations -->
+    
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl font-semibold text-white">Recent Reservations</h2>

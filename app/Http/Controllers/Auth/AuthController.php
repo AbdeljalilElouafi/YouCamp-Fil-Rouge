@@ -65,7 +65,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:user,manager',
+            'role' => 'required|in:visitor,manager',
         ]);
     
         $status = $request->role === 'manager' ? 'pending' : 'active';
@@ -81,6 +81,11 @@ class AuthController extends Controller
         $role = Role::where('name', $request->role)->first();
         $user->roles()->attach($role);
     
+        
+        if ($role && $role->name === 'visitor') {
+            Auth::login($user);
+            return redirect('/visitor/home');
+        } //this part isn't working, i need to check if a user role is visitor and redirect him to visitor/home
         
         if ($status === 'active') {
             Auth::login($user);

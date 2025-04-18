@@ -5,6 +5,17 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AdminManagerController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Manager\DashboardController;
+use \App\Http\Controllers\AubergeController;
+use \App\Http\Controllers\ReservationController;
+use App\Models\Auberge;
+
+
+
+
+Route::get('/regions/{region}/villes', function (Region $region) {
+    return $region->villes;
+});
 
 
 Route::middleware('guest')->group(function () {
@@ -79,7 +90,8 @@ Route::middleware('auth','role:admin')->group(function () {
         Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
         Route::put('/services/{id}', [ServiceController::class, 'update'])->name('admin.services.update');
         Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
-            
+
+       
         
 
         Route::get('/posts', function () {
@@ -88,48 +100,105 @@ Route::middleware('auth','role:admin')->group(function () {
     });
 });
 
+Route::get('/regions/{region}/villes', function (App\Models\Region $region) {
+    return response()->json($region->villes);
+})->name('api.regions.villes');
+
+Route::get('/manager/auberges/room-form', [AubergeController::class, 'roomForm'])
+    ->name('manager.auberges.room-form');
+
 
 Route::get('/pending-activation', function () {
     return view('auth.pending_activation');
 })->name('pending.activation');
 
+Route::middleware(['auth'])->group(function () {
+    // Auberge routes
+    Route::get('/auberges', [AubergeController::class, 'index'])->name('auberges.index');
+    Route::get('/auberges/create', [AubergeController::class, 'create'])->name('auberges.create');
+    Route::post('/auberges', [AubergeController::class, 'store'])->name('auberges.store');
+    Route::get('/auberges/{auberge}', [AubergeController::class, 'show'])->name('auberges.show');
+    Route::get('/auberges/{auberge}/edit', [AubergeController::class, 'edit'])->name('auberges.edit');
+    Route::put('/auberges/{auberge}', [AubergeController::class, 'update'])->name('auberges.update');
+    Route::delete('/auberges/{auberge}', [AubergeController::class, 'destroy'])->name('auberges.destroy');
+    Route::get('/my-auberges', [AubergeController::class, 'myAuberges'])->name('auberges.my');
+});
 
-Route::middleware('auth','role:manager')->group(function () {
+Route::get('/auberges', [AubergeController::class, 'index'])->name('auberges.index');
+Route::get('/auberges/{auberge}', [AubergeController::class, 'show'])->name('auberges.show');
+
+Route::middleware(['auth'])->group(function () {
     
-
     
-    Route::prefix('manager')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('manager.dashboard');
-        })->name('manager.dashboard');
-
-        // Route::get('/users', function () {
-        //     return view('manager.users');
-        // })->name('manager.users');
-
-       
+    
+    Route::middleware('role:manager')->prefix('manager')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('manager.dashboard');
     });
 });
 
-
-Route::middleware('auth','role:visitor')->group(function () {
-    
-
-
-    
-    Route::prefix('visitor')->group(function () {
-        Route::get('/home', function () {
-            return view('visitor.home');
-        })->name('visitor.home');
-
-        // Route::get('/users', function () {
-        //     return view('manager.users');
-        // })->name('manager.users');
-
-       
-    });
+Route::middleware(['auth', 'role:visitor'])->group(function () {
+    Route::resource('reservations', ReservationController::class)->except(['index', 'show']);
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
+});
+
+Route::get('/reservations/{reservation}/payment/success', [ReservationController::class, 'paymentSuccess'])
+    ->name('payment.success');
+Route::get('/reservations/{reservation}/payment/cancel', [ReservationController::class, 'paymentCancel'])
+    ->name('payment.cancel');
+
+    Route::middleware(['auth', 'role:visitor'])->group(function () {
+        Route::prefix('visitor')->group(function () {
+            Route::get('/home', [\App\Http\Controllers\Visitor\HomeController::class, 'index'])
+                ->name('visitor.home');
+            
+        });
+    });
+
+
+Route::post('/stripe/webhook', function (Request $request) {
+    $payload = $request->getContent();
+    $sig_header = $request->header('Stripe-Signature');
+    $endpoint_secret = config('services.stripe.webhook_secret');
+
+    try {
+        $event = \Stripe\Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+        );
+    } catch (\Exception $e) {
+        return response('Invalid signature', 400);
+    }
+
+    
+    if ($event->type === 'checkout.session.completed') {
+        $session = $event->data->object;
+        $reservation = Reservation::find($session->metadata->reservation_id);
+        
+        if ($reservation && $session->payment_status === 'paid') {
+            $reservation->update([
+                'status' => 'confirmed',
+                'paid_at' => now()
+            ]);
+        }
+    }
+
+    return response('Success', 200);
+});
+
+
 
 Route::get('/', function () {
-    return view('welcome');
+    $auberges = Auberge::with(['featuredPhoto'])
+        ->where('is_active', true)
+        ->where('is_featured', true)
+        ->take(6)
+        ->get();
+
+    return view('welcome', [
+        'auberges' => $auberges
+    ]);
 });

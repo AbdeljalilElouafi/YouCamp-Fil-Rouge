@@ -1,4 +1,4 @@
-
+<!-- resources/views/landing-page/components/header.blade.php -->
 <header class="bg-gradient-to-r from-[#FF6F00] to-[#fda83a] text-white shadow-lg">
     <div class="container mx-auto flex items-center justify-between py-5 px-8">
         <div class="flex items-center space-x-3">

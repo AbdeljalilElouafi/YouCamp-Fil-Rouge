@@ -79,7 +79,7 @@
     
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
-        // Add animation to form elements
+        
         document.addEventListener('DOMContentLoaded', function() {
             const formElements = document.querySelectorAll('form > div');
             

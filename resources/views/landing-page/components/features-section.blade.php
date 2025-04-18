@@ -19,13 +19,13 @@
                 <h3 class="text-xl font-bold mb-2">{{ $auberge->name }}</h3>
                 <p class="text-gray-600 mb-2">
                     <i class="fas fa-map-marker-alt text-[#FF6F00] mr-2"></i>
-                    {{ $auberge->city }}
+                    {{ $auberge->city->ville }}
                 </p>
                 <p class="text-gray-700 mb-4 line-clamp-2">{{ $auberge->description }}</p>
                 
                 <div class="flex justify-between items-center">
                     <div>
-                        <span class="font-bold text-[#FF6F00]">${{ number_format($auberge->price_per_night, 2) }}</span>
+                        <span class="font-bold text-[#FF6F00]">{{ number_format($auberge->price_per_night, 2) }} MAD</span>
                         <span class="text-gray-500 text-sm">/ night</span>
                     </div>
                     

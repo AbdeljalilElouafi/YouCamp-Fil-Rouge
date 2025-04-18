@@ -25,6 +25,7 @@
                     <span>Gérants</span>
                 </a>
             </li>
+
             
             <li class="nav-item">
                 <a href="{{ route('admin.services.index') }}" class="flex items-center px-4 py-3 text-white">

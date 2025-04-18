@@ -29,6 +29,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/app.js') }}"></script> <!-- Ensure lowercase 'js' -->
+    <script src="{{ asset('js/app.js') }}"></script> 
 </body>
 </html>

@@ -1,3 +1,4 @@
+<!-- resources/views/landing-page/components/footer.blade.php -->
 
 <footer class="bg-[#655d5d] text-white py-8">
     <div class="container mx-auto text-center">
